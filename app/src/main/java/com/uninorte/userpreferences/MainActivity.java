@@ -15,7 +15,7 @@ public class MainActivity extends ActionBarActivity {
     TextView name, age, gender;
     MainActivity Main = this;
     SharedPreferences mSharedPreferences;
-    String skeyname = "", skeyage = "", skeygender = "";
+    String skeyname = "prefname", skeyage = "prefage", skeygender = "prefgender";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
             age.setText(bundle.getString("prefage")+" years old");
             gender.setText(bundle.getString("prefgender"));
         }else{
-            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String textname = mSharedPreferences.getString(skeyname,"User name");
             String textage = mSharedPreferences.getString(skeyage,"User age");
             String textgender = mSharedPreferences.getString(skeygender,"User gender");
@@ -71,15 +71,9 @@ public class MainActivity extends ActionBarActivity {
         age = (TextView) findViewById(R.id.age);
         gender = (TextView) findViewById(R.id.gender);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Main.getApplicationContext());
-        SharedPreferences.Editor editorName = sharedPreferences.edit();
-        SharedPreferences.Editor editorAge = sharedPreferences.edit();
-        SharedPreferences.Editor editorGender = sharedPreferences.edit();
-        editorName.putString(skeyname, name.getText().toString());
-        editorName.commit();
-        editorAge.putString(skeyage,age.getText().toString());
-        editorAge.commit();
-        editorGender.putString(skeygender,gender.getText().toString());
-        editorGender.commit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(skeygender,gender.getText().toString());
+        editor.commit();
     }
 
     @Override
