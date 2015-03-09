@@ -1,6 +1,9 @@
 package com.uninorte.userpreferences;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +13,9 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity {
 
     TextView name, age, gender;
+    MainActivity Main = this;
+    SharedPreferences mSharedPreferences;
+    String skeyname = "", skeyage = "", skeygender = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,14 @@ public class MainActivity extends ActionBarActivity {
             name.setText(bundle.getString("prefname"));
             age.setText(bundle.getString("prefage")+" years old");
             gender.setText(bundle.getString("prefgender"));
+        }else{
+            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String textname = mSharedPreferences.getString(skeyname,"User name");
+            String textage = mSharedPreferences.getString(skeyage,"User age");
+            String textgender = mSharedPreferences.getString(skeygender,"User gender");
+            name.setText(textname);
+            age.setText(textage);
+            gender.setText(textgender);
         }
     }
 
@@ -50,5 +64,27 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void Preferences(){
+        name = (TextView) findViewById(R.id.name);
+        age = (TextView) findViewById(R.id.age);
+        gender = (TextView) findViewById(R.id.gender);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Main.getApplicationContext());
+        SharedPreferences.Editor editorName = sharedPreferences.edit();
+        SharedPreferences.Editor editorAge = sharedPreferences.edit();
+        SharedPreferences.Editor editorGender = sharedPreferences.edit();
+        editorName.putString(skeyname, name.getText().toString());
+        editorName.commit();
+        editorAge.putString(skeyage,age.getText().toString());
+        editorAge.commit();
+        editorGender.putString(skeygender,gender.getText().toString());
+        editorGender.commit();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        this.Preferences();
     }
 }
